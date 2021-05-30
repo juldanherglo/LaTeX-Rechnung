@@ -80,6 +80,7 @@
     }
     \def\rechnrtext{Invoice No}
     \def\ustnrtext{VAT Reg No}
+    \def\steuernrtext{Steuernummer}
     \def\empftext{Customer:}
     \def\kontaktperstext{Contact}
     \def\anschrifttext{Postal address}
@@ -126,6 +127,7 @@
     }
     \def\rechnrtext{Rechnungsnummer}
     \def\ustnrtext{USt-IdNr.}
+    \def\steuernrtext{Steuernummer}
     \def\empftext{Leistungsempf\"anger:}
     \def\kontaktperstext{Kontaktperson}
     \def\anschrifttext{Postanschrift}
@@ -206,6 +208,7 @@
 \newcommand{\rechnungsdatum}[1]{\def\rdat{#1}}
 \newcommand{\rechnungsnummer}[1]{\def\rnr{#1}}
 \newcommand{\ustnummer}[1]{\def\ust{#1}}
+\newcommand{\steuernummer}[1]{\def\stnr{#1}}
 
 % Kundentabelle
 \newcommand{\kundentabelle}[1]{
@@ -432,6 +435,7 @@
       \datumtext&\rdat     
       \ifthenelse{\equal{\rnr}{}}{}{\\\rechnrtext&\rnr}
       \ifthenelse{\equal{\ust}{}}{}{\\\ustnrtext&\ust}
+      \ifthenelse{\equal{\stnr}{}}{}{\\\steuernrtext&\stnr}
     \end{tabular}}}%
   \end{minipage}
   
