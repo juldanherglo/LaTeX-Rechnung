@@ -80,7 +80,10 @@
     }
     \def\rechnrtext{Invoice No}
     \def\ustnrtext{VAT Reg No}
-    \def\steuernrtext{Steuernummer}
+    \def\steuernrtext{Tax No}
+    \def\steuernrKtext{Your VAT Id No}
+    \def\currencypre{\$\ }
+    \def\currencypost{}
     \def\empftext{Customer:}
     \def\kontaktperstext{Contact}
     \def\anschrifttext{Postal address}
@@ -128,6 +131,9 @@
     \def\rechnrtext{Rechnungsnummer}
     \def\ustnrtext{USt-IdNr.}
     \def\steuernrtext{Steuernummer}
+    \def\steuernrKtext{Ihre UmsSt.ID}
+    \def\currencypre{}
+    \def\currencypost{\ \euro}
     \def\empftext{Leistungsempf\"anger:}
     \def\kontaktperstext{Kontaktperson}
     \def\anschrifttext{Postanschrift}
@@ -203,12 +209,16 @@
 \newcommand{\kundenkontakt}[1]{\def\kontaktK{#1}}
 \newcommand{\kundentel}[1]{\def\telK{#1}}
 \newcommand{\kundenemail}[1]{\def\emailK{#1}}
+\def\taxidK{}
+\newcommand{\kundentaxid}[1]{\def\taxidK{#1}}
 
 % Rechnungsinformationen
 \newcommand{\rechnungsdatum}[1]{\def\rdat{#1}}
 \newcommand{\rechnungsnummer}[1]{\def\rnr{#1}}
 \newcommand{\ustnummer}[1]{\def\ust{#1}}
 \newcommand{\steuernummer}[1]{\def\stnr{#1}}
+\def\revcharge{false}
+\newcommand{\reversecharge}[1]{\def\revcharge{#1}}
 
 % Kundentabelle
 \newcommand{\kundentabelle}[1]{
@@ -226,13 +236,13 @@
   \FPdiv\rsumprint\rsum{3}
   \begin{tabularx}{\textwidth}{@{}X r r@{}}
     \hline
-    \platz & \multicolumn{1}{r}{\zwischensumtext} & \numprint{\FPprint\rsumprint}\ \euro
+    \platz & \multicolumn{1}{r}{\zwischensumtext} & \currencypre\numprint{\FPprint\rsumprint}\currencypost
   \end{tabularx}
   \newpage
   \begin{tabularx}{\textwidth}{@{}X r@{}}
     \platz & \multicolumn{1}{c}{\textbf{\uebertragtext}} \\
     \hline
-    \platz & \numprint{\FPprint\rsumprint}\ \euro
+    \platz & \currencypre\numprint{\FPprint\rsumprint}\currencypost
   \end{tabularx}
   \npnoround
   
@@ -253,22 +263,23 @@
   \ifthenelse{\equal{#1}{}}{
   \begin{tabularx}{\textwidth}{@{}X r r@{}}
     \hline
-    \platz & \multicolumn{1}{r}{\nettosumtext} & \numprint{\FPprint\rsumprint}\ \euro \\
-    \platz & \multicolumn{1}{r}{\usttext\ \umsatzst\%} & \numprint{\FPprint\us}\ \euro \\
+    \ifthenelse{\equal{\revcharge}{true}}{Invoice without VAT because there is a reverse of the tax liability (reverse charge). \\}{}
+    \platz & \multicolumn{1}{r}{\nettosumtext} & \currencypre\numprint{\FPprint\rsumprint}\currencypost \\
+    \platz & \multicolumn{1}{r}{\usttext\ \umsatzst\%} & \currencypre\numprint{\FPprint\us}\currencypost \\
     \cline{2-3}
-    \platz & \multicolumn{1}{r}{\textbf{\bruttosumtext}} & \textbf{\numprint{\FPprint\es}\ \euro}
+    \platz & \multicolumn{1}{r}{\textbf{\bruttosumtext}} & \textbf{\currencypre\numprint{\FPprint\es}\currencypost}
   \end{tabularx}}{%
   \FPset\gez{#1}%
   \FPsub\rest\es\gez
   \begin{tabularx}{\textwidth}{@{}X r r@{}}
     \hline
-    \platz & \multicolumn{1}{r}{\nettosumtext} & \numprint{\FPprint\rsumprint}\ \euro \\
-    \platz & \multicolumn{1}{r}{\usttext\ \umsatzst\%} & \numprint{\FPprint\us}\ \euro \\
+    \platz & \multicolumn{1}{r}{\nettosumtext} & \currencypre\numprint{\FPprint\rsumprint}\currencypost \\
+    \platz & \multicolumn{1}{r}{\usttext\ \umsatzst\%} & \currencypre\numprint{\FPprint\us}\currencypost \\
     \cline{2-3}
-    \platz & \multicolumn{1}{r}{\textbf{\bruttosumtext}} & \textbf{\numprint{\FPprint\es}\ \euro} \\[5mm]
-    \platz & \multicolumn{1}{r}{\geztext} & \numprint{\FPprint\gez}\ \euro \\
+    \platz & \multicolumn{1}{r}{\textbf{\bruttosumtext}} & \textbf{\currencypre\numprint{\FPprint\es}\currencypost} \\[5mm]
+    \platz & \multicolumn{1}{r}{\geztext} & \currencypre\numprint{\FPprint\gez}\currencypost \\
     \cline{2-3}
-    \platz & \multicolumn{1}{r}{\textbf{\resttext}} & \textbf{\numprint{\FPprint\rest}\ \euro}
+    \platz & \multicolumn{1}{r}{\textbf{\resttext}} & \textbf{\currencypre\numprint{\FPprint\rest}\currencypost}
   \end{tabularx}}
   \npnoround
   
@@ -292,7 +303,7 @@
   \xdef\leistC{\c}%
   \FPadd\rsum\rsum\c
   \xdef\rsum{\rsum}%
-  {#1}&{#2}&{\numprint{\FPprint\leistA}}&{\numprint{\FPprint\leistB}\ \euro}&{\numprint{\FPprint\leistC}\ \euro}\\
+  {#1}&{#2}&{\numprint{\FPprint\leistA}}&{\currencypre\numprint{\FPprint\leistB}\currencypost}&{\currencypre\numprint{\FPprint\leistC}\currencypost}\\
 }
 
 % Leistungstabelle
@@ -324,7 +335,7 @@
   \xdef\reiseD{\d}%
   \FPadd\rsum\rsum\d
   \xdef\rsum{\rsum}%
-  {#1}&{#2}&{#3\ km}&{\numprint{\FPprint\reiseC}\ \euro/km}&{\numprint{\FPprint\reiseD}\ \euro}\\
+  {#1}&{#2}&{#3\ km}&{\currencypre\numprint{\FPprint\reiseC}\currencypost/km}&{\currencypre\numprint{\FPprint\reiseD}\currencypost}\\
 }
 
 % Reisetabelle
@@ -348,7 +359,7 @@
   \xdef\nachtA{\a}%
   \FPadd\rsum\rsum\a
   \xdef\rsum{\rsum}%
-  {#1}&{#2}&{\numprint{\FPprint\nachtA}\ \euro}\\
+  {#1}&{#2}&{\currencypre\numprint{\FPprint\nachtA}\currencypost}\\
 }
 
 % Uebernachtungstabelle
@@ -372,7 +383,7 @@
   \xdef\sonstA{\a}%
   \FPadd\rsum\rsum\a
   \xdef\rsum{\rsum}%
-  {#1}&{\numprint{\FPprint\sonstA}\ \euro}\\
+  {#1}&{\currencypre\numprint{\FPprint\sonstA}\currencypost}\\
 }
 
 % Sonstigestabelle
@@ -436,6 +447,7 @@
       \ifthenelse{\equal{\rnr}{}}{}{\\\rechnrtext&\rnr}
       \ifthenelse{\equal{\ust}{}}{}{\\\ustnrtext&\ust}
       \ifthenelse{\equal{\stnr}{}}{}{\\\steuernrtext&\stnr}
+      \ifthenelse{\equal{\taxidK}{}}{}{\\\steuernrKtext&\taxidK}
     \end{tabular}}}%
   \end{minipage}
   
