@@ -118,6 +118,7 @@
     \def\bruttosumtext{Total amount}
     \def\geztext{Already paid}
     \def\resttext{Remaining amount}
+    \def\totalsumhourstext{Total sum of hours:\ }
   }{
     \selectlanguage{ngerman}
     \RequirePackage{numprint}
@@ -168,6 +169,7 @@
     \def\bruttosumtext{Summe Brutto}
     \def\geztext{Bereits gezahlt}
     \def\resttext{Zu zahlender Restbetrag}
+    \def\totalsumhourstext{Gesamtstundenanzahl:\ }
   }
 } 
 
@@ -235,6 +237,7 @@
 \newcommand\platz{\rule[-1.2ex]{0pt}{4ex}}%
 
 % Rechnungssumme
+\newcommand*\timesum{0}
 \newcommand*\rsum{0}
 \newcommand*\rsumprint{0}
 \newcommand*\zwischensumme{
@@ -291,6 +294,9 @@
   
   \vspace{5mm}
   
+\FPdiv\timesumprint\timesum{3}
+\FPround\timesumprint\timesumprint{1}
+\totalsumhourstext\numprint{\FPprint\timesumprint} h
 }
 
 % Leistung Tabelleneintrag
@@ -309,6 +315,8 @@
   \xdef\leistC{\c}%
   \FPadd\rsum\rsum\c
   \xdef\rsum{\rsum}%
+  \FPadd\timesum\timesum\leistA
+  \xdef\timesum{\timesum}%
   {#1}&{#2}&{\numprint{\FPprint\leistA}}&{\currencypre\numprint{\FPprint\leistB}\currencypost}&{\currencypre\numprint{\FPprint\leistC}\currencypost}\\
 }
 
