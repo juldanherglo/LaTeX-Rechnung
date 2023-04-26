@@ -211,6 +211,12 @@
 \newcommand{\kundenemail}[1]{\def\emailK{#1}}
 \def\taxidK{}
 \newcommand{\kundentaxid}[1]{\def\taxidK{#1}}
+\def\firmaK{}
+\newcommand{\kundenfirma}[1]{\def\firmaK{#1}}
+\def\abteilungK{}
+\newcommand{\kundenabteilung}[1]{\def\abteilungK{#1}}
+\def\projektK{}
+\newcommand{\kundenprojekt}[1]{\def\projektK{#1}}
 
 % Rechnungsinformationen
 \newcommand{\rechnungsdatum}[1]{\def\rdat{#1}}
@@ -456,10 +462,10 @@
   \ifthenelse{\equal{\kundentab}{ein}}{
     \begin{tabularx}{\textwidth}{|X|X|}%
       \hline
-      \underline{\empftext}	&	\underline{\kontaktperstext\ \nameK:} \\[1mm]
+      \underline{\empftext}	&	\underline{\kontaktperstext\ \ifthenelse{\equal{\firmaK}{}}{\nameK}{\firmaK}:} \\[1mm]
       \nameK			&	\kontaktK \\
-      \anschriftK			&	\ifthenelse{\equal{\telK}{}}{}{\teltext\ \telK} \\
-      \ortK				&	\ifthenelse{\equal{\emailK}{}}{}{\emailtext\ \emailK} \\
+      \anschriftK			&	\ifthenelse{\equal{\telK}{}}{\ifthenelse{\equal{\abteilungK}{}}{}{\abteilungK}}{\teltext\ \telK} \\
+      \ortK				&	\ifthenelse{\equal{\emailK}{}}{\ifthenelse{\equal{\projektK}{}}{}{\projektK}}{\emailtext\ \emailK} \\
       \hline
     \end{tabularx}%
     
