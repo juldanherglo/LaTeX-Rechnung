@@ -227,6 +227,8 @@
 \newcommand{\steuernummer}[1]{\def\stnr{#1}}
 \def\revcharge{false}
 \newcommand{\reversecharge}[1]{\def\revcharge{#1}}
+\def\hidemon{false}
+\newcommand{\hidemoney}[1]{\def\hidemon{#1}}
 
 % Kundentabelle
 \newcommand{\kundentabelle}[1]{
@@ -269,6 +271,7 @@
   \FPmul\us\us{.01}
   \FPmul\us\us\rsumprint
   \FPadd\es\rsumprint\us
+  \ifthenelse{\equal{\hidemon}{true}}{}{
   \ifthenelse{\equal{#1}{}}{
   \begin{tabularx}{\textwidth}{@{}X r r@{}}
     \hline
@@ -289,7 +292,7 @@
     \platz & \multicolumn{1}{r}{\geztext} & \currencypre\numprint{\FPprint\gez}\currencypost \\
     \cline{2-3}
     \platz & \multicolumn{1}{r}{\textbf{\resttext}} & \textbf{\currencypre\numprint{\FPprint\rest}\currencypost}
-  \end{tabularx}}
+  \end{tabularx}}}
   \npnoround
   
   \vspace{5mm}
@@ -317,15 +320,15 @@
   \xdef\rsum{\rsum}%
   \FPadd\timesum\timesum\leistA
   \xdef\timesum{\timesum}%
-  {#1}&{#2}&{\numprint{\FPprint\leistA}}&{\currencypre\numprint{\FPprint\leistB}\currencypost}&{\currencypre\numprint{\FPprint\leistC}\currencypost}\\
+  {#1}&{#2}&{\numprint{\FPprint\leistA}}&\ifthenelse{\equal{\hidemon}{true}}{}{{\currencypre\numprint{\FPprint\leistB}\currencypost}}&\ifthenelse{\equal{\hidemon}{true}}{}{{\currencypre\numprint{\FPprint\leistC}\currencypost}}\\
 }
 
 % Leistungstabelle
 \NewEnviron{tableistung}{%
   \def\temp{%
     \begin{tabularx}{\textwidth}{@{}>\platz X c c c r@{}}
-     &\textbf{\zeitpunkttexta}& & \textbf{\satztexta} & \\[-1.5ex]
-    \textbf{\leistungtext} & \textbf{\zeitpunkttextb} & \textbf{\stundentext} & \textbf{\satztextb} & \multicolumn{1}{c}{\textbf{\betragtext}} \\
+     &\textbf{\zeitpunkttexta}& & \ifthenelse{\equal{\hidemon}{true}}{}{\textbf{\satztexta}} & \\[-1.5ex]
+    \textbf{\leistungtext} & \textbf{\zeitpunkttextb} & \textbf{\stundentext} & \ifthenelse{\equal{\hidemon}{true}}{}{\textbf{\satztextb}} & \multicolumn{1}{c}{\ifthenelse{\equal{\hidemon}{true}}{}{\textbf{\betragtext}}} \\
     \hline}%
     \expandafter\temp\BODY%
     \end{tabularx}%
